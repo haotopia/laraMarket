@@ -17,7 +17,7 @@ class VerifyCsrfToken extends Middleware {
 		$token = $request->ajax() ? $request->header('X-CSRF-TOKEN') : $request->input('_token');
 		return $request->session()->token() == $token;
 	}
-	public function handle($request, \Closure $next, $guard = null) {
+	public function handle($request, \Closure $next) {
 		/*if (empty(session("id"))){
 			            $user = session('wechat.oauth_user');
 			            $openid = $user['id'];
