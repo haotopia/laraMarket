@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Log;
 
-class WechatController extends Controller {
+class WeChatController extends Controller {
 
 	/**
 	 * 处理微信的请求消息
@@ -14,13 +14,18 @@ class WechatController extends Controller {
 	public function serve() {
 		Log::info('request arrived.'); # 注意：Log 为 Laravel 组件，所以它记的日志去 Laravel 日志看，而不是 EasyWeChat 日志
 
-		$wechat = app('wechat');
-		$wechat->server->setMessageHandler(function ($message) {
+		$app = app('wechat.official_account');
+		$app->server->push(function ($message) {
 			return "欢迎关注 overtrue！";
 		});
 
-		Log::info('return response.');
-
-		return $wechat->server->serve();
+		return $app->server->serve();
+	}
+	public function oAuth($request) {
+		$app = app('wechat.official_account');
+		$response = $app->oauth->scopes(['snsapi_userinfo'])
+			->setRequest($request)
+			->redirect();
+		return $response;
 	}
 }
