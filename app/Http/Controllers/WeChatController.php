@@ -21,11 +21,12 @@ class WeChatController extends Controller {
 
 		return $app->server->serve();
 	}
-	public function oAuth($request) {
-		$app = app('wechat.official_account');
-		$response = $app->oauth->scopes(['snsapi_userinfo'])
-			->setRequest($request)
-			->redirect();
-		return $response;
+	public function oAuth() {
+		/*$app = app('wechat.official_account');
+			$response = $app->oauth->scopes(['snsapi_userinfo'])
+				->setRequest($request)
+				->redirect();
+
+		*/
 	}
 }
