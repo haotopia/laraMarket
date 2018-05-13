@@ -9,6 +9,9 @@ use Illuminate\Support\Facades\Session;
 class HomeController extends Controller {
 	public function show(Request $request) {
 		$user = session('wechat.oauth_user');
+		if (Cache::get('openId') != $user['default']['id']) {
+			Cache::forget('openId');
+		}
 		$dbcheck = DB::table('users')->where('openId', $user['default']['id'])->first();
 		if (!$dbcheck) {
 			$data = [
