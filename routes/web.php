@@ -15,11 +15,13 @@ Route::get('/', function () {
 	return view('welcome');
 });
 Route::any('/wechat', 'weChatController@serve');
-Route::group(['middleware' => ['web', 'wechat.oauth']], function () {
+
+Route::group(['middleware' => ['web']], function () {
+
+	Route::any('/home', 'HomeController@show')->name('home.show')->middleware('wechat.oauth');
 	Route::get('/user', function () {
 		$user = session('wechat.oauth_user'); // 拿到授权用户资料
-
-		dd($user);
+		dd($user)->middleware('wechat.oauth');
 	});
-	Route::get('/wechatUser', 'HomeController@wechatUser');
+	Route::any('/wechatUser', 'HomeController@wechatUser');
 });

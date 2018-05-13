@@ -1,17 +1,40 @@
 <?php
-
 namespace App\Http\Controllers;
+use App\Models\User;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class HomeController extends Controller {
-	public function show() {
+	public function show(Request $request) {
+		$user = session('wechat.oauth_user');
+		$dbcheck = DB::table('users')->where('openId', $user['default']['id'])->first();
+		if (!$dbcheck) {
+			$data = [
+				'openId' => $user['default']['id'],
+				'name' => $user['default']['name'],
+				'nickname' => $user['default']['nickname'],
+				'avatar' => $user['default']['avatar'],
+				'email' => $user['default']['email'],
+				'sex' => $user['default']['original']['sex'],
+				'city' => $user['default']['original']['city'],
+				'type' => 0,
+			];
+			User::create($data);
+			Cache::put('openId', $user['default']['id'], 60);
+			return view('home/show');
+		}
+		Cache::put('openId', $user['default']['id'], 60);
+
 		return view('home/show');
 	}
-
-	public function wechatUser() {
-		$user = session('wechat.oauth_user');
+	public function wechatUser(Request $request) {
+		$openid = Cache::get('openId');
+		$user = DB::table('users')->where('openid', $openid)->first();
 		return [
-			'img' => $user['default']['avatar'],
-			'name' => $user['default']['nickname'],
+			'img' => $user->avatar,
+			'name' => $user->nickname,
 		];
 	}
 }
