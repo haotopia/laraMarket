@@ -27,3 +27,4 @@ Route::group(['middleware' => ['web']], function () {
 Route::resource('stores', 'StoresController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
 Route::resource('addresses', 'AddressesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
 Route::resource('categories', 'CategoriesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
+Route::resource('goods', 'GoodsController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
