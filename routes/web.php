@@ -19,9 +19,10 @@ Route::any('/wechat', 'weChatController@serve');
 Route::group(['middleware' => ['web']], function () {
 
 	Route::any('/home', 'HomeController@show')->name('home.show')->middleware('wechat.oauth');
-	Route::get('/user', function () {
-		$user = session('wechat.oauth_user'); // 拿到授权用户资料
-		dd($user)->middleware('wechat.oauth');
-	});
+
 	Route::any('/wechatUser', 'HomeController@wechatUser');
+	Route::any('/stores', 'StoresController@show')->name('stores.show');
 });
+
+Route::resource('stores', 'StoresController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
+Route::resource('addresses', 'AddressesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
