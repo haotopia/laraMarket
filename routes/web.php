@@ -22,6 +22,8 @@ Route::group(['middleware' => ['web']], function () {
 
 	Route::any('/wechatUser', 'HomeController@wechatUser');
 	Route::any('/stores', 'StoresController@show')->name('stores.show');
+	Route::get('/addresses/show', 'AddressesController@show')->name('address.show');
+	Route::any('/addresses/store', 'AddressesController@store');
 });
 
 Route::resource('stores', 'StoresController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);

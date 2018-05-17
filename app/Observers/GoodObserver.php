@@ -2,20 +2,17 @@
 
 namespace App\Observers;
 
-use App\Models\Good;
+use App\Models\Goods;
 
 // creating, created, updating, updated, saving,
 // saved,  deleting, deleted, restoring, restored
 
-class GoodObserver
-{
-    public function creating(Good $good)
-    {
-        //
-    }
+class GoodsObserver {
+	public function creating(Goods $goods) {
+		//
+	}
 
-    public function updating(Good $good)
-    {
-        //
-    }
+	public function updating(Goods $goods) {
+		//
+	}
 }
