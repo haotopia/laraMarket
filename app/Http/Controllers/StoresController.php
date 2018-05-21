@@ -25,6 +25,7 @@ class StoresController extends Controller {
 			$storeList[$i]['id'] = $store->id;
 			$storeList[$i]['name'] = $store->name;
 			$storeList[$i]['img'] = $store->img;
+			$storeList[$i]['abstract'] = $store->abstract;
 			$i++;
 		}
 		return $storeList;

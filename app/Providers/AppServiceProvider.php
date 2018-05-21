@@ -12,6 +12,8 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot() {
 		\App\Models\User::observe(\App\Observers\UserObserver::class);
+		\App\Models\Comment::observe(\App\Observers\CommentObserver::class);
+		\App\Models\Shopcart::observe(\App\Observers\ShopcartObserver::class);
 		\App\Models\Goods::observe(\App\Observers\GoodsObserver::class);
 		\App\Models\Category::observe(\App\Observers\CategoryObserver::class);
 		\App\Models\Address::observe(\App\Observers\AddressObserver::class);
