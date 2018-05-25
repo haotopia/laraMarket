@@ -45,12 +45,21 @@ class GoodsesController extends Controller {
 		return $List;
 	}
 
+	public function adminShow($store = 1) {
+
+	}
 	public function create(Goods $goods) {
 		return view('goodsses.create_and_edit', compact('goods'));
 	}
 
 	public function store(GoodsRequest $request) {
-		$goods = Goods::create($request->all());
+		dd($request->image);
+		if ($request->image) {
+			$result = $uploader->save($request->image, 'goodsAvatars');
+			if ($result) {
+				$data['avatar'] = $result['path'];
+			}
+		}
 		return redirect()->route('goodsses.show', $goods->id)->with('message', 'Created successfully.');
 	}
 

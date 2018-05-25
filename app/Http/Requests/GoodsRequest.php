@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-class GoodssesRequest extends Request {
+class GoodsRequest extends Request {
 	public function rules() {
 		switch ($this->method()) {
 		// CREATE
