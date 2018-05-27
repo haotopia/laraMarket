@@ -49,8 +49,7 @@ class AddressesController extends Controller {
 		if ($request->id) {
 			Address::where('id', $request->id)->update($data);
 			return [
-				'error' => '',
-				'message' => '',
+				'message' => 1,
 			];
 		}
 		Address::where('status', 1)->update(['status' => 0]);
@@ -59,8 +58,7 @@ class AddressesController extends Controller {
 			DB::table('payments')->where('id', $payment)->update(['ads_id' => $ads->id]);
 		}
 		return [
-			'error' => '',
-			'message' => '',
+			'message' => 1,
 		];
 	}
 

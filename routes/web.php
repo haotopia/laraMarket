@@ -29,6 +29,8 @@ Route::group(['middleware' => ['web']], function () {
 	Route::any('/comments/{id}', 'CommentsController@show');
 	Route::any('/addresses/edit', 'AddressesController@edit');
 	Route::any('/list/data', 'PaymentsController@show');
+	Route::any('/list/show', 'PaymentsController@show');
+
 });
 
 // Route::resource('stores', 'StoresController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
@@ -79,3 +81,6 @@ Route::post('/admin/logout', 'Auth\LoginController@logout')->name('admin.logout'
 Route::any('/!', function () {
 	Session::flush();
 });
+
+Route::any('/pay', 'PaymentsController@wechatPay');
+Route::any('/getPay', 'PaymentsController@getPayRes');

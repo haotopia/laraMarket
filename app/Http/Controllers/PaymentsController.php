@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PaymentRequest;
 use App\Models\Address;
 use App\Models\Payment;
+use EasyWeChat\Factory;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -77,7 +78,7 @@ class PaymentsController extends Controller {
 			$i++;
 		}
 		if (!$address) {
-			Cache::put('payment', $payment->id);
+			Cache::put('payment', $payment->id, 3);
 			return ['message' => 0, 'payment' => $payment->id];
 		}
 		return ['message' => 1, 'payment' => $payment->id];
@@ -141,5 +142,37 @@ class PaymentsController extends Controller {
 			return ['message' => 1];
 		}
 		return 0;
+	}
+
+	public function wechatPay(PaymentRequest $request) {
+		$app = Factory::payment([
+			'sandbox' => true,
+		]);
+
+		$result = $app->order->unify([
+			'body' => '测试订单',
+			'out_trade_no' => '',
+			'total_fee' => 88,
+			'trade_type' => 'JSAPI',
+			'openid' => 'oUpF8uMuAJO_M2pxb1Q9zNjWeS6o',
+		]);
+
+		return 1;
+
+	}
+	public function getPayRes() {
+		$app = app('wechat.official_account');
+		return $app->template_message->send([
+			'touser' => 'oMbyU0fB9CBrvDqGU9A8Q2eoBcmc',
+			'template_id' => 'Ffw5w-GgC_eUAX_hu67gYAseWPjorPZ0vRJAIEdWyi0',
+			'url' => 'https://market.test/admin/index',
+			'data' => [
+				'first' => '有用户下单了，请及时处理',
+				'user' => '耗子',
+				'payment' => '12',
+				'time' => '2018-5-27 21:50:00',
+				'foot' => '点击本消息进入管理员界面',
+			],
+		]);
 	}
 }
