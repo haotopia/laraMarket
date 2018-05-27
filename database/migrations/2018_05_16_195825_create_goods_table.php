@@ -9,11 +9,12 @@ class CreateGoodsTable extends Migration {
 			$table->increments('id');
 			$table->string('market_id');
 			$table->string('name');
-			$table->integer('price');
+			$table->float('price');
 			$table->integer('quntity');
 			$table->string('abstract');
 			$table->string('img');
 			$table->string('address');
+			$table->integer('cat_id');
 			$table->timestamps();
 		});
 	}

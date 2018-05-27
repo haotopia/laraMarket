@@ -29,7 +29,6 @@ class HomeController extends Controller {
 			return view('home/show');
 		}
 		Cache::put('openId', $user['default']['id'], 60);
-
 		return view('home/show');
 	}
 	public function wechatUser(Request $request) {

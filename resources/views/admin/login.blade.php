@@ -37,6 +37,7 @@
       <!-- @yield('content') -->
 
       <div class="am-u-sm-10 login-am-center">
+        <div id="qrCode">
         <form class="am-form" id="login">
           <fieldset>
             <div class="am-form-group">
@@ -58,6 +59,19 @@
   <script src="{{asset('/js/admin/amazeui.min.js')}}"></script>
   <script src="{{asset('/js/admin/app.js')}}"></script>
   <script src="{{asset('/js/admin/login.js')}}"></script>
+  <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
+  <script>
+    window.onload=function(){
+
+        var obj = new WxLogin({
+            id: "qrCode",
+            appid: "wxdb98bf4e80ee3749",
+            scope: "snsapi_login",
+            redirect_uri: "{{route('admin.index')}}",
+            href: '',
+            state: ""
+        });
+    }
 
 </body>
 

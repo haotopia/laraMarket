@@ -233,26 +233,23 @@
                 </div>
                 <div class="am-g classity-header">
                     <div class="am-u-sm-4">分类名称</div>
-                    <div class="am-u-sm-1">排序</div>
+                    <div class="am-u-sm-3">排序</div>
                     <div class="am-u-sm-2">创建时间</div>
-                    <div class="am-u-sm-2">商品数量</div>
                     <div class="am-u-sm-3">操作</div>
                 </div>
                 @foreach($categories as $cat)
                 <div class="am-g classify-body">
                     <div class="am-u-sm-4">{{$cat->name}}</div>
-                    <div class="am-u-sm-1">
+                    <div class="am-u-sm-3">
                         <i class="am-icon-long-arrow-down"></i>
+                        <i class="am-icon-long-arrow-up"></i>
                     </div>
                     <div class="am-u-sm-2">
                         {{$cat->updated_at}}
                     </div>
-                    <div class="am-u-sm-2">
-                        5
-                    </div>
                     <div class="am-u-sm-3">
-                        <a href="#">删除分类</a>
-                        <a href="#" class="change_list">修改名称</a>
+                        <a href="#" class="delete_list" attr-id='{{$cat->id}}'>删除分类</a>
+                        <a href="#" class="change_list" attr-id='{{$cat->id}}'>修改名称</a>
                     </div>
                 </div>
                 @endforeach

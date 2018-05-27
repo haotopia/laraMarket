@@ -7,7 +7,7 @@ class UserController extends Controller {
 	public function savewechatUser() {
 		$user = session('wechat.oauth_user');
         $dbcheck=DB::table('users')->where('openId',$user['default']['id'])->first();
-        if($dbcheck){
+        if(!$dbcheck){
 		$data=[
             'openId' =$user['default']['id'];
             'name'  =$user['default']['name'];
@@ -22,7 +22,7 @@ class UserController extends Controller {
         }
         return view();
 	}
-    public function findUser(){
-
+    public function adminUser(){
+        $user = session('wechat.oauth_user');
     }
 }

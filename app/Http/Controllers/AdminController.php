@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\Goods;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller {
@@ -11,6 +13,9 @@ class AdminController extends Controller {
 	public function login() {
 		return view('admin.login');
 	}
+	public function adminLogin() {
+
+	}
 	public function list() {
 		return view('admin.list');
 	}
@@ -18,7 +23,7 @@ class AdminController extends Controller {
 		return view('admin.listdetail');
 	}
 	public function tableClassify() {
-		$categories = DB::table('categories')->paginate(15);
+		$categories = Category::paginate(15);
 		return view('admin.table_classify', ['categories' => $categories]);
 	}
 	public function tableCommitChange() {
@@ -27,11 +32,11 @@ class AdminController extends Controller {
 	}
 	public function tableCommitList($id) {
 		$goods = DB::table('goods')->where('id', $id)->first();
-		$categories = DB::table('categories')->where('stor_id', $id)->paginate(100);
+		$categories = DB::table('categories')->where('stor_id', 1)->paginate(100);
 		return view('admin.table_commit_list', ['goods' => $goods, 'categories' => $categories]);
 	}
 	public function tableFontList() {
-		$goods = DB::table('goods')->paginate(1);
+		$goods = Goods::paginate(10);
 		return view('admin.table_font_list', ['goodses' => $goods]);
 	}
 }

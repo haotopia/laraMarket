@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Handlers\ImageUploadHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\GoodsRequest;
 use App\Models\Goods;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class GoodsesController extends Controller {
@@ -52,15 +54,31 @@ class GoodsesController extends Controller {
 		return view('goodsses.create_and_edit', compact('goods'));
 	}
 
-	public function store(GoodsRequest $request) {
-		dd($request->image);
+	public function store(GoodsRequest $request, ImageUploadHandler $uploader) {
+		$data = [
+			'name' => $request->name,
+			'price' => $request->price,
+			'quntity' => $request->save,
+			'abstract' => $request->des,
+			'cat_id' => $request->label,
+			'updated_at' => Carbon::now()->toDateTimeString(),
+		];
+
 		if ($request->image) {
-			$result = $uploader->save($request->image, 'goodsAvatars');
+			$result = $uploader->save($request->image, 'goodsAvatars', 'goods', 362);
 			if ($result) {
-				$data['avatar'] = $result['path'];
+				$data['img'] = $result['path'];
 			}
 		}
-		return redirect()->route('goodsses.show', $goods->id)->with('message', 'Created successfully.');
+		$goods = DB::table('goods');
+		if ($request->goodsId) {
+			$data['id'] = $request->goodsId;
+			$goods->where('id', $data['id'])->update($data);
+		} else {
+			$data['created_at'] = Carbon::now()->toDateTimeString();
+			$goods->insert($data);
+		};
+		return ['message' => 'success'];
 	}
 
 	public function edit(Goods $goods) {

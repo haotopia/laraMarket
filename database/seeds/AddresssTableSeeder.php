@@ -1,20 +1,17 @@
 <?php
 
-use Illuminate\Database\Seeder;
 use App\Models\Address;
+use Illuminate\Database\Seeder;
 
-class AddresssTableSeeder extends Seeder
-{
-    public function run()
-    {
-        $addresss = factory(Address::class)->times(50)->make()->each(function ($address, $index) {
-            if ($index == 0) {
-                // $address->field = 'value';
-            }
-        });
+class AddresssTableSeeder extends Seeder {
+	public function run() {
+		$addresss = factory(Address::class)->times(50)->make()->each(function ($address, $index) {
+			if ($index == 0) {
+				// $address->field = 'value';
+			}
+		});
 
-        Address::insert($addresss->toArray());
-    }
+		Address::insert($addresss->toArray());
+	}
 
 }
-

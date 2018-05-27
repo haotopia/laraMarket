@@ -344,17 +344,13 @@
                       <td>猪饲料</td>
                       <td class="am-hide-sm-only">{{$goods->updated_at}}</td>
                       <td>
-                        <div class="am-btn-toolbar">
-                          <div class="am-btn-group am-btn-group-xs">
-                            <button class="am-btn am-btn-default am-btn-xs am-text-secondary">
-                              <span class="am-icon-pencil-square-o"></span>
-                              <a href="{{route('admin.table_commit_list')}}/{{$goods->id}}">编辑</a>
-                            </button>
-                            <button class="am-btn am-btn-default am-btn-xs am-hide-sm-only">
-                              <span class="am-icon-copy"></span> 上架</button>
-                            <button class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only">
-                              <span class="am-icon-trash-o"></span> 删除</button>
-                          </div>
+                        <div class="wrap">
+                            <a href="{{route('admin.table_commit_list')}}/{{$goods->id}}">
+                                <div class="myButton">编辑</div>
+                            </a>
+                            <a href="./index.html">
+                              <div class="myButton">删除</div>
+                             </a>
                         </div>
                       </td>
                     </tr>

@@ -12,35 +12,69 @@ class AddressesController extends Controller {
 	public function __construct() {
 	}
 
-	public function show() {
+	public function show(AddressRequest $request) {
+		if ($request->id) {
+			Address::where('status', 1)->update(['status' => 0]);
+			Address::where('id', $request->id)->update(['status' => 1]);
+		}
 		$openid = Cache::get('openId');
 		$addresses = DB::table('addresses')->where('openId', $openid)->get();
 		$addressList = array();
 		$i = 0;
 		foreach ($addresses as $key => $address) {
-			$addressList[$i]['id'] = $address->id;
-			$addressList[$i]['name'] = $address->name;
-			$addressList[$i]['address'] = $address->address;
+			$addressList['data'][$i] = [
+				'id' => $address->id,
+				'name' => $address->name,
+				'phone' => $address->phone,
+				'address' => $address->mainaddress,
+				'checked' => $address->status,
+			];
 			$i++;
 		}
 		return $addressList;
 	}
 
 	public function store(AddressRequest $request) {
-		//$address = Address::create($request->all());
-		$address = $request->input();
-		dd($address);
 		$openid = Cache::get('openId');
-
+		$data = [
+			'openId' => $openid,
+			'name' => $request->name,
+			'phone' => $request->phone,
+			'province' => $request->district[0],
+			'city' => $request->district[1],
+			'county' => $request->district[2],
+			'address' => $request->information,
+			'mainaddress' => $request->mainAddress . $request->information,
+		];
+		if ($request->id) {
+			Address::where('id', $request->id)->update($data);
+			return [
+				'error' => '',
+				'message' => '',
+			];
+		}
+		Address::create($data);
 		return [
 			'error' => '',
 			'message' => '',
 		];
 	}
 
-	public function edit(Address $address) {
-		$this->authorize('update', $address);
-		return view('addresses.create_and_edit', compact('address'));
+	public function edit(AddressRequest $request) {
+
+		$openid = Cache::get('openId');
+		$address = Address::where('id', $request->all())->first()->toArray();
+		$addressList['state'] = [
+			'id' => $address['id'],
+			'name' => $address['name'],
+			'phone' => $address['phone'],
+			'address' => [
+				$address['province'], $address['city'], $address['county'],
+			],
+			'information' => $address['address'],
+		];
+
+		return $addressList;
 	}
 
 	public function update(AddressRequest $request, Address $address) {

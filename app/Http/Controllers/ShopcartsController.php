@@ -2,59 +2,94 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Shopcart;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopcartRequest;
+use App\Models\Payment;
+use App\Models\Shopcart;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
-class ShopcartsController extends Controller
-{
-    public function __construct()
-    {
-        $this->middleware('auth', ['except' => ['index', 'show']]);
-    }
+class ShopcartsController extends Controller {
 
-	public function index()
-	{
-		$shopcarts = Shopcart::paginate();
-		return view('shopcarts.index', compact('shopcarts'));
+	public function show() {
+		$openid = Cache::get('openId');
+		$shopcart = DB::table('shopcarts')->where('openId', $openid)->join('goods', 'goods.id', '=', 'shopcarts.goods_id')->get();
+		$i = 0;
+		foreach ($shopcart as $shop) {
+			$list[$i] = [
+				'id' => $shop->id,
+				'intro' => $shop->name,
+				'num' => $shop->quntity,
+				'price' => $shop->price,
+				'img' => $shop->img,
+			];
+			$i++;
+		}
+		return $list;
 	}
 
-    public function show(Shopcart $shopcart)
-    {
-        return view('shopcarts.show', compact('shopcart'));
-    }
-
-	public function create(Shopcart $shopcart)
-	{
-		return view('shopcarts.create_and_edit', compact('shopcart'));
+	public function store(ShopcartRequest $request) {
+		$user = Cache::get('openId');
+		$i = 0;
+		$req = $request->all();
+		foreach ($req['list'] as $re) {
+			$data = [
+				'openId' => $user,
+				'goods_id' => $re['id'],
+				'quntity' => $re['num'],
+			];
+			Shopcart::create($data);
+		}
+		return ['message' => 'success'];
 	}
 
-	public function store(ShopcartRequest $request)
-	{
-		$shopcart = Shopcart::create($request->all());
-		return redirect()->route('shopcarts.show', $shopcart->id)->with('message', 'Created successfully.');
+	public function pay(Shopcart $shopcart) {
+		$user = Cache::get('openId');
+		$i = 0;
+		$req = $request->all();
+
+		$address = DB::table('addresses')->where(['openId' => $user, 'status' => 1])->first();
+		$data = [];
+		$data['openId'] = $user;
+		if ($address) {
+			$data['ads_id'] = $address->id;
+		}
+		$payment = Payment::create($data);
+		foreach ($req['data'] as $re) {
+			$listdata[$i] = [
+				'openId' => Cache::get('openId'),
+				'goods_id' => $re['id'],
+				'quntity' => $re['num'],
+				'payment' => $payment->id,
+			];
+			DB::table('list')->insert($listdata[$i]);
+			$i++;
+		}
+		if (!$address) {
+			return ['message' => 'address'];
+		}
+		return ['message' => 'success', 'payment' => $payment->id];
 	}
 
-	public function edit(Shopcart $shopcart)
-	{
-        $this->authorize('update', $shopcart);
-		return view('shopcarts.create_and_edit', compact('shopcart'));
-	}
+	public function destroy(ShopcartRequest $request) {
+		$user = Cache::get('openId');
+		foreach ($request->data as $re) {
+			Shopcart::where(['openId' => $user, 'goods_id' => $re['id']])->delete();
+		}
 
-	public function update(ShopcartRequest $request, Shopcart $shopcart)
-	{
-		$this->authorize('update', $shopcart);
-		$shopcart->update($request->all());
-
-		return redirect()->route('shopcarts.show', $shopcart->id)->with('message', 'Updated successfully.');
-	}
-
-	public function destroy(Shopcart $shopcart)
-	{
-		$this->authorize('destroy', $shopcart);
-		$shopcart->delete();
-
-		return redirect()->route('shopcarts.index')->with('message', 'Deleted successfully.');
+		$shopcart = Shopcart::where('openId', $user)->get();
+		$i = 0;
+		foreach ($shopcart as $shop) {
+			$goods = DB::table('goods')->where('id', $shop->goods_id)->get();
+			$list[$i] = [
+				'id' => $shop->goods_id,
+				'intro' => $goods[0]->name,
+				'num' => $shop->quntity,
+				'price' => $goods[0]->price,
+				'img' => $goods[0]->img,
+			];
+			$i++;
+		}
+		return $list;
 	}
 }
