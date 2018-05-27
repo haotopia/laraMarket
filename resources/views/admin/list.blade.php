@@ -691,14 +691,16 @@
                         操作
                     </div>
                 </div>
+                 @foreach($re as $pa)
                 <div class="am-cf table">
+
                     <div class="table-infromation">
                         <div class="am-u-sm-6 header-table">
-                            <span>下单时间 2015-03-12 21:17:20</span>
-                            <span>订单号：1111020608</span>
+                            <span>下单时间 {{$pa['created_at']}}</span>
+                            <span>订单号：{{$pa['id']}}</span>
                         </div>
                         <div class="am-u-sm-6 header-table">
-                            <span>共一件商品 合计：￥：0.10（含运费 ￥0.00）</span>
+                            <span>共{{$pa['gcount']}}件商品 合计：￥：{{$pa['pcount']}}</span>
                         </div>
                         <div class="am-u-sm-6 body-table">
                             <div class="am-u-sm-1">
@@ -706,54 +708,40 @@
                                     <input type="checkbox"> 发货
                                 </label>
                             </div>
-                            <div class="am-u-sm-3">
+                            <div class='am-u-sm-11'>
+                             @foreach($pa['goods'] as $goods)
+                             <div class='am-u-sm-13'>
+                                <div class="am-u-sm-3">
 
-                                <img src="https://zos.alipayobjects.com/rmsportal/TekJlZRVCjLFexlOCuWn.png')}}" alt="" width="100%" height="100%">
+                                    <!-- <img src="{{$goods['img']}}" alt="" height=""> -->
+                                </div>
+                                <div class="am-u-sm-6">
+                                     {{$goods['title']}}
+                                </div>
+                                <div class="am-u-sm-2">
+                                    <p>￥{{$goods['price']}}</p>
+                                    <p>x{{$goods['num']}}</p>
+                                </div>
                             </div>
-                            <div class="am-u-sm-6">
-                                 【夏威夷果】12号正式开始营业东风大厦法定
-                            </div>
-                            <div class="am-u-sm-2">
-                                <p>￥23.00</p>
-                                <p>×1</p>
+                            @endforeach
                             </div>
                         </div>
                         <div class="am-u-sm-4  body-table">
-                            <p>小小 123456789</p>
-                            <p>河北省啥会受到健康的拉风的斯科拉的</p>
+                            <p>{{$pa['name']}} {{$pa['phone']}}</p>
+                            <p>{{$pa['address']}}</p>
                         </div>
                         <div class="am-u-sm-2 body-table">
                             <a href="#">完成</a>
-                            <a href="listdetail" target="_blank">订单详情</a>
+                            <a href="{{route('admin.listdetail')}}/{{$pa['id']}}" target="_blank">订单详情</a>
                         </div>
                     </div>
+
                 </div>
+                @endforeach
                 <div class="am-cf">
 
                   <div class="am-fr">
-                    <ul class="am-pagination tpl-pagination">
-                      <li class="am-disabled">
-                        <a href="#">«</a>
-                      </li>
-                      <li class="am-active">
-                        <a href="#">1</a>
-                      </li>
-                      <li>
-                        <a href="#">2</a>
-                      </li>
-                      <li>
-                        <a href="#">3</a>
-                      </li>
-                      <li>
-                        <a href="#">4</a>
-                      </li>
-                      <li>
-                        <a href="#">5</a>
-                      </li>
-                      <li>
-                        <a href="#">»</a>
-                      </li>
-                    </ul>
+                    {{$payment->links()}}
                   </div>
                 </div>
                 <hr>

@@ -28,6 +28,7 @@ Route::group(['middleware' => ['web']], function () {
 	Route::any('/stores/{id}', 'GoodsesController@show');
 	Route::any('/comments/{id}', 'CommentsController@show');
 	Route::any('/addresses/edit', 'AddressesController@edit');
+	Route::any('/list/data', 'PaymentsController@show');
 });
 
 // Route::resource('stores', 'StoresController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
@@ -42,8 +43,10 @@ Route::group(['middleware' => ['web']], function () {
 Route::any('/admin', 'AdminController@show');
 Route::any('/admin/index', 'AdminController@show')->name('admin.index');
 Route::get('/admin/login', 'AdminController@login')->name('admin.login');
+
 Route::any('/admin/list', 'AdminController@list')->name('admin.list');
-Route::any('/admin/listdetail', 'AdminController@listdetail')->name('admin.listdetail');
+Route::any('/admin/listdetail/{id}', 'AdminController@listdetail');
+Route::any('/admin/listdetail/', 'AdminController@listdetail')->name('admin.listdetail');
 Route::any('/admin/table_classify', 'AdminController@tableClassify')->name('admin.table_classify');
 Route::any('/admin/table_commit_list', 'AdminController@tableCommitList')->name('admin.table_commit_list');
 Route::any('/admin/table_commit_list/{id}', 'AdminController@tableCommitList');
@@ -58,9 +61,21 @@ Route::post('/admin/categories/store', 'CategoriesController@store')->name('cate
 Route::post('/admin/categories/destroy', 'CategoriesController@destroy')->name('category.destroy');
 //payment
 Route::post('/payment/store', 'PaymentsController@store')->name('payment.store');
+Route::post('/listdetail/show', 'PaymentsController@listdata')->name('payment.listdata');
+Route::post('/order/show', 'PaymentsController@listdata');
 
 //shopcart
 Route::get('/shopcart/show', 'ShopcartsController@show')->name('shopcart.show');
 Route::post('/shopcart/store', 'ShopcartsController@store');
 Route::any('/shopcart/destroy', 'ShopcartsController@destroy');
 Route::any('/shopcart/pay', 'ShopcartsController@pay');
+
+//address
+Route::any('/address/destroy', 'AddressesController@destroy');
+//auth
+Route::post('/admin/login', 'Auth\LoginController@login');
+Route::post('/admin/logout', 'Auth\LoginController@logout')->name('admin.logout');
+//logout
+Route::any('/!', function () {
+	Session::flush();
+});

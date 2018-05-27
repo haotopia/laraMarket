@@ -125,16 +125,19 @@
               <a href="#">
                 <span class="am-icon-cog"></span> 设置</a>
             </li>
-            <li>
-              <a href="#">
-                <span class="am-icon-power-off"></span> 退出</a>
-            </li>
           </ul>
         </li>
         <li>
-          <a href="###" class="tpl-header-list-link">
+          <a href="{{ route('admin.logout') }}" class="tpl-header-list-link"
+                    onclick="event.preventDefault();
+                             document.getElementById('logout-form').submit();">
             <span class="am-icon-sign-out tpl-header-list-ico-out-size"></span>
-          </a>
+        </a>
+
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                    {{ csrf_field() }}
+                </form>
+
         </li>
       </ul>
     </div>

@@ -199,8 +199,8 @@
         </div>
         <div class="list-user">
           <h2>买家信息</h2>
-          <p>收货地址： 小小，12345678922， 河北省保定市华北电力大学989</p>
-          <p>下单账号：11123546431353</p>
+          <p>收货地址： {{$info['name']}}，{{$info['phone']}}， {{$info['address']}}</p>
+          <p>下单账号：{{$info['openId']}}</p>
         </div>
 
         <div class="am-tabs" data-am-tabs="{noSwipe: 1}" id="doc-tab-demo-1">
@@ -226,13 +226,14 @@
                 <div class="am-u-sm-2">退款状态</div>
                 <div class="am-u-sm-2">单价/数量</div>
               </div>
+              @foreach($info['goods'] as $goods)
               <div class="am-g tab-body">
                 <div class="am-u-sm-5 list-name">
                   <div>
                     <img src="https://zos.alipayobjects.com/rmsportal/TekJlZRVCjLFexlOCuWn.png')}}" alt="" width="100%" height="110">
                   </div>
                   <div class="list-name-two">
-                    <span>【夏威夷果】12号正式开始营业sdfasdsafdafsddsfgsf</span>
+                    <span>{{$goods['title']}}</span>
 
                   </div>
                 </div>
@@ -240,42 +241,25 @@
                     狗饲料
                 </div>
                 <div class="am-u-sm-2 list-lineheight">
-                    已发货
+                    {{$info['result']}}
                 </div>
                 <div class="am-u-sm-2 list-lineheight">
                    无
                 </div>
                 <div class="am-u-sm-2 list-price">
-                    <span>￥23.00</span>
-                    <span>*1</span>
+                    <span>￥{{$goods['price']}}</span>
+                    <span>*{{$goods['num']}}</span>
                 </div>
               </div>
-
+              @endforeach
                 <div class="am-u-sm-6 list-time">
-                    <p>订单编号</p>
-                    <p>下单时间：2018-05-12 21:17:20</p>
-                    <p>付款时间：2018-05-12 21:17:50</p>
+                    <p>订单编号：{{$info['id']}}</p>
+                    <p>下单时间：{{$info['created_at']}}</p>
                 </div>
                 <div class="am-u-sm-6 list-time list-main-price">
-                    <p>商品金额： ￥23.00</p>
-                    <p>运费：0.00</p>
+                    <p>商品金额： ￥{{$info['pcount']}}</p>
                 </div>
 
-            </div>
-            <div class="am-tab-panel">
-              <div class="am-g">
-                  <div class="am-u-sm-4">
-                      <h2>货运单号： 888846544645</h2>
-                      <span>快递公司：申通</span>
-                      <br />
-                      <span>发货时间 2018-05-12 13:44:32</span>
-                  </div>
-                  <div class="am-u-sm-8">
-                      <ul>
-                          <li>2018-05-12 15:44:32 卖家已发货，包裹等待揽收</li>
-                      </ul>
-                  </div>
-              </div>
             </div>
           </div>
         </div>

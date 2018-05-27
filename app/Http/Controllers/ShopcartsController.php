@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ShopcartRequest;
+use App\Models\Goods;
 use App\Models\Payment;
 use App\Models\Shopcart;
 use Illuminate\Support\Facades\Cache;
@@ -13,15 +14,16 @@ class ShopcartsController extends Controller {
 
 	public function show() {
 		$openid = Cache::get('openId');
-		$shopcart = DB::table('shopcarts')->where('openId', $openid)->join('goods', 'goods.id', '=', 'shopcarts.goods_id')->get();
+		$shopcart = DB::table('shopcarts')->where('openId', $openid)->get();
 		$i = 0;
 		foreach ($shopcart as $shop) {
+			$goods = Goods::where('id', $shop->goods_id)->first();
 			$list[$i] = [
 				'id' => $shop->id,
-				'intro' => $shop->name,
+				'intro' => $goods->name,
 				'num' => $shop->quntity,
-				'price' => $shop->price,
-				'img' => $shop->img,
+				'price' => $goods->price,
+				'img' => $goods->img,
 			];
 			$i++;
 		}
@@ -33,6 +35,10 @@ class ShopcartsController extends Controller {
 		$i = 0;
 		$req = $request->all();
 		foreach ($req['list'] as $re) {
+			$inc = Shopcart::where([['goods_id', $re['id']], ['openId', $user]])->increment('quntity', $re['num']);
+			if ($inc) {
+				continue;
+			}
 			$data = [
 				'openId' => $user,
 				'goods_id' => $re['id'],
@@ -43,7 +49,7 @@ class ShopcartsController extends Controller {
 		return ['message' => 'success'];
 	}
 
-	public function pay(Shopcart $shopcart) {
+	public function pay(ShopcartRequest $request) {
 		$user = Cache::get('openId');
 		$i = 0;
 		$req = $request->all();
@@ -68,7 +74,7 @@ class ShopcartsController extends Controller {
 		if (!$address) {
 			return ['message' => 'address'];
 		}
-		return ['message' => 'success', 'payment' => $payment->id];
+		return ['message' => 'success', 'id' => $payment->id];
 	}
 
 	public function destroy(ShopcartRequest $request) {

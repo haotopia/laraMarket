@@ -36,22 +36,36 @@
       </div>
       <!-- @yield('content') -->
 
-      <div class="am-u-sm-10 login-am-center">
-        <div id="qrCode">
-        <form class="am-form" id="login">
-          <fieldset>
-            <div class="am-form-group">
-              <input type="email" class="" id="doc-ipt-email-1" placeholder="输入电子邮件">
-            </div>
-            <div class="am-form-group">
-              <input type="password" class="" id="doc-ipt-pwd-1" placeholder="请输入密码">
-            </div>
-            <p>
-              <button type="button" class="am-btn am-btn-default" id="submit">登录</button>
-            </p>
-          </fieldset>
-        </form>
-      </div>
+
+      <form class="am-u-sm-10 login-am-center" method="POST" action="{{ route('admin.login') }}">
+                        {{ csrf_field() }}
+
+                        <div class="form-group{{ $errors->has('email') ? ' has-error' : '' }}">
+                            <div class="am-form-group">
+                                <input id="email" type="email" class="form-control" name="email" value="{{ old('email') }}" placeholder="输入电子邮件" required autofocus>
+
+                                @if ($errors->has('email'))
+                                    <span class="label label-warning">
+                                        <strong>{{ $errors->first('email') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+
+                        <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
+                            <div class="am-form-group">
+                                <input id="password" type="password" class="form-control" name="password" placeholder="请输入密码" required>
+
+                                @if ($errors->has('password'))
+                                    <span class="label label-warning">
+                                        <strong>{{ $errors->first('password') }}</strong>
+                                    </span>
+                                @endif
+                            </div>
+                        </div>
+                        <button type="submit" class="am-btn am-btn-default" id="submit">登录</button>
+                    </form>
+                </div>
     </div>
   </div>
 
@@ -59,19 +73,6 @@
   <script src="{{asset('/js/admin/amazeui.min.js')}}"></script>
   <script src="{{asset('/js/admin/app.js')}}"></script>
   <script src="{{asset('/js/admin/login.js')}}"></script>
-  <script src="http://res.wx.qq.com/connect/zh_CN/htmledition/js/wxLogin.js"></script>
-  <script>
-    window.onload=function(){
-
-        var obj = new WxLogin({
-            id: "qrCode",
-            appid: "wxdb98bf4e80ee3749",
-            scope: "snsapi_login",
-            redirect_uri: "{{route('admin.index')}}",
-            href: '',
-            state: ""
-        });
-    }
 
 </body>
 
